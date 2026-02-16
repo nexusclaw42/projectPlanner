@@ -34,6 +34,7 @@ interface Item {
   tags: string
   dueDate: string | null
   projectId: string | null
+  parentId: string | null
   project: Project | null
   subtasks: Item[]
 }
