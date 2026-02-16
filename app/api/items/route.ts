@@ -46,6 +46,7 @@ export async function POST(request: NextRequest) {
       dueDate: body.dueDate || null,
       projectId: body.projectId || null,
       parentId: body.parentId || null,
+      documentUrl: body.documentUrl || null,
       subtasks: [],
     }
     mockItems.push(item)

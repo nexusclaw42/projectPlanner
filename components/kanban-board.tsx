@@ -15,7 +15,7 @@ import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Separator } from '@/components/ui/separator'
-import { Plus, Calendar, Tag, Folder } from 'lucide-react'
+import { Plus, Calendar, Tag, Folder, Link } from 'lucide-react'
 
 interface Project {
   id: string
@@ -35,6 +35,7 @@ interface Item {
   dueDate: string | null
   projectId: string | null
   parentId: string | null
+  documentUrl: string | null
   project: Project | null
   subtasks: Item[]
 }
@@ -62,6 +63,7 @@ export function KanbanBoard() {
     description: '',
     priority: 'medium',
     projectId: '',
+    documentUrl: '',
   })
 
   useEffect(() => {
@@ -126,7 +128,7 @@ export function KanbanBoard() {
       })
       if (res.ok) {
         setNewItemOpen(false)
-        setNewItem({ title: '', description: '', priority: 'medium', projectId: '' })
+        setNewItem({ title: '', description: '', priority: 'medium', projectId: '', documentUrl: '' })
         fetchData()
       }
     } catch (error) {
@@ -202,6 +204,14 @@ export function KanbanBoard() {
                     </option>
                   ))}
                 </select>
+              </div>
+              <div>
+                <label className="text-sm font-medium">Document/Folder Link</label>
+                <Input
+                  value={newItem.documentUrl}
+                  onChange={(e) => setNewItem({ ...newItem, documentUrl: e.target.value })}
+                  placeholder="https://drive.google.com/..."
+                />
               </div>
               <Button onClick={createItem} className="w-full">
                 Create Item
@@ -287,6 +297,20 @@ export function KanbanBoard() {
                                           <div className="flex items-center gap-1 mt-2 text-xs text-gray-500">
                                             <Calendar className="w-3 h-3" />
                                             {new Date(item.dueDate).toLocaleDateString()}
+                                          </div>
+                                        )}
+                                        {item.documentUrl && (
+                                          <div className="flex items-center gap-1 mt-2 text-xs">
+                                            <a 
+                                              href={item.documentUrl} 
+                                              target="_blank" 
+                                              rel="noopener noreferrer"
+                                              className="flex items-center gap-1 text-blue-600 hover:text-blue-800"
+                                              onClick={(e) => e.stopPropagation()}
+                                            >
+                                              <Link className="w-3 h-3" />
+                                              Document
+                                            </a>
                                           </div>
                                         )}
                                         {item.subtasks.length > 0 && (
