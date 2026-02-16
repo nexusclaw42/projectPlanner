@@ -1,29 +1,49 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { prisma } from '@/lib/prisma'
+
+// Mock data for Vercel deployment (SQLite doesn't work on serverless)
+const mockProjects = [
+  {
+    id: '1',
+    name: 'House Screener',
+    description: 'UK property search tool with amenity filtering',
+    status: 'active',
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+  {
+    id: '2',
+    name: 'Coffee Product',
+    description: 'Building a new coffee product',
+    status: 'active',
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+  {
+    id: '3',
+    name: '2nd Brain System',
+    description: 'Personal knowledge management system',
+    status: 'active',
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+]
 
 export async function GET() {
-  try {
-    const projects = await prisma.project.findMany({
-      orderBy: {
-        createdAt: 'desc',
-      },
-    })
-    return NextResponse.json(projects)
-  } catch (error) {
-    return NextResponse.json({ error: 'Failed to fetch projects' }, { status: 500 })
-  }
+  return NextResponse.json(mockProjects)
 }
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
-    const project = await prisma.project.create({
-      data: {
-        name: body.name,
-        description: body.description,
-        status: body.status || 'active',
-      },
-    })
+    const project = {
+      id: Date.now().toString(),
+      name: body.name,
+      description: body.description,
+      status: body.status || 'active',
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    }
+    mockProjects.push(project)
     return NextResponse.json(project)
   } catch (error) {
     return NextResponse.json({ error: 'Failed to create project' }, { status: 500 })

@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { prisma } from '@/lib/prisma'
+
+// Mock data storage (in-memory for Vercel)
+const mockItems: any[] = []
 
 export async function PATCH(
   request: NextRequest,
@@ -8,23 +10,20 @@ export async function PATCH(
   try {
     const { id } = await params
     const body = await request.json()
-    const item = await prisma.item.update({
-      where: { id },
-      data: {
-        title: body.title,
-        description: body.description,
-        status: body.status,
-        priority: body.priority,
-        tags: body.tags,
-        dueDate: body.dueDate ? new Date(body.dueDate) : null,
-        projectId: body.projectId,
-      },
-      include: {
-        project: true,
-        subtasks: true,
-      },
-    })
-    return NextResponse.json(item)
+    
+    // Find and update item
+    const itemIndex = mockItems.findIndex(item => item.id === id)
+    if (itemIndex === -1) {
+      return NextResponse.json({ error: 'Item not found' }, { status: 404 })
+    }
+    
+    mockItems[itemIndex] = {
+      ...mockItems[itemIndex],
+      ...body,
+      id, // keep original id
+    }
+    
+    return NextResponse.json(mockItems[itemIndex])
   } catch (error) {
     return NextResponse.json({ error: 'Failed to update item' }, { status: 500 })
   }
@@ -36,9 +35,12 @@ export async function DELETE(
 ) {
   try {
     const { id } = await params
-    await prisma.item.delete({
-      where: { id },
-    })
+    const itemIndex = mockItems.findIndex(item => item.id === id)
+    if (itemIndex === -1) {
+      return NextResponse.json({ error: 'Item not found' }, { status: 404 })
+    }
+    
+    mockItems.splice(itemIndex, 1)
     return NextResponse.json({ success: true })
   } catch (error) {
     return NextResponse.json({ error: 'Failed to delete item' }, { status: 500 })
