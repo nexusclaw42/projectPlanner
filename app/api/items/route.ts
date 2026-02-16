@@ -21,6 +21,7 @@ const mockItems = [
   { id: '12', title: 'Deploy to Vercel', description: 'Get the app live', type: 'task', status: 'in_progress', priority: 'high', tags: '', dueDate: null, projectId: '3', parentId: null, subtasks: [] },
   { id: '13', title: 'Add CRUD operations', description: 'Create, read, update, delete items', type: 'task', status: 'todo', priority: 'medium', tags: '', dueDate: null, projectId: '3', parentId: null, subtasks: [] },
   { id: '14', title: 'Add subtasks support', description: 'Allow nested tasks', type: 'task', status: 'todo', priority: 'medium', tags: '', dueDate: null, projectId: '3', parentId: null, subtasks: [] },
+  { id: '17', title: 'Build full 2nd Brain system (Phase 2)', description: 'Add document viewer, conversation sync, full-text search, workspace file browser, notes/memory integration', type: 'task', status: 'backlog', priority: 'medium', tags: '', dueDate: null, projectId: '3', parentId: null, subtasks: [] },
   
   // General improvements (no project)
   { id: '15', title: 'Configure Brave Search API', description: 'Add API key for market data', type: 'task', status: 'todo', priority: 'medium', tags: '', dueDate: null, projectId: null, parentId: null, subtasks: [] },
